@@ -6,10 +6,12 @@ import Cart from './pages/Cart';
 import Login from './pages/auth/Login';
 import AdminLayout from './components/admin/AdminLayout';
 import AdminProducts from './pages/admin/AdminProducts';
-import AdminAccounts from './pages/admin/AdminAccounts';
+import CreateAccounts from './pages/admin/accounts/CreateAccounts';
+import AccountsList from './pages/admin/accounts/AccountsList';
 import AdminHistory from './pages/admin/AdminHistory';
 import AdminOrders from './pages/admin/AdminOrders';
 import { CartProvider } from './context/CartContext';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   return (
@@ -31,11 +33,16 @@ function App() {
             <Route index element={<AdminOrders />} />
             <Route path="orders" element={<AdminOrders />} />
             <Route path="products" element={<AdminProducts />} />
-            <Route path="accounts" element={<AdminAccounts />} />
+            <Route path="accounts" element={<AccountsList />} />
+            <Route path="accounts/create" element={<CreateAccounts />} />
             <Route path="history" element={<AdminHistory />} />
           </Route>
         </Routes>
       </BrowserRouter>
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+      />
     </CartProvider>
   );
 }

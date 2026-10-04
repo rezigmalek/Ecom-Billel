@@ -1,3 +1,8 @@
+export const apiUrl = 'http://localhost:8000/api';
+export const adminToken = () => {
+  return localStorage.getItem('token-billel');
+};
+
 export const mockProducts = [
   {
     id: 1,

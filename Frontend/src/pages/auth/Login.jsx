@@ -3,6 +3,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Package, Lock, Mail, ArrowRight } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { apiUrl } from '../../data/mockData';
+import { adminToken } from '../../data/mockData';
+import toast from 'react-hot-toast';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -15,12 +18,12 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
+
   const handleLogin = async (data) => {
     setIsLoading(true);
-    setServerError('');
 
     try {
-      const response = await fetch('http://localhost:8000/api/login', {
+      const response = await fetch(`${apiUrl}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -35,23 +38,31 @@ const Login = () => {
       const result = await response.json();
 
       if (!response.ok) {
-        setServerError(
-          result.message || 'Email ou mot de passe incorrect.'
-        );
+        const message =
+          result.message || 'Email ou mot de passe incorrect.';
+
+        toast.error(message);
+        setServerError(message);
+
         return;
       }
 
       // Stocker le token retourné par Laravel
-      localStorage.setItem('token', result.token);
+      localStorage.setItem('token-billel', result.token);
+
+      // Afficher le message de succès
+      toast.success('Connexion réussie !');
 
       // Redirection après connexion
       navigate('/admin/orders');
 
     } catch (error) {
       console.error('Erreur de connexion :', error);
-      setServerError(
-        'Impossible de contacter le serveur. Vérifiez que l’API Laravel est démarrée.'
+
+      toast.error(
+        'Impossible de contacter le serveur. Vérifiez que API Laravel est démarrée.'
       );
+
     } finally {
       setIsLoading(false);
     }
@@ -107,11 +118,10 @@ const Login = () => {
                   {...register('email', {
                     required: 'L’adresse email est obligatoire.',
                   })}
-                  className={`pl-10 block w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all sm:text-sm ${
-                    errors.email
-                      ? 'border-red-400'
-                      : 'border-slate-300'
-                  }`}
+                  className={`pl-10 block w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all sm:text-sm ${errors.email
+                    ? 'border-red-400'
+                    : 'border-slate-300'
+                    }`}
                   placeholder="admin@ecombillel.dz"
                 />
               </div>
@@ -139,11 +149,10 @@ const Login = () => {
                   {...register('password', {
                     required: 'Le mot de passe est obligatoire.',
                   })}
-                  className={`pl-10 block w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all sm:text-sm ${
-                    errors.password
-                      ? 'border-red-400'
-                      : 'border-slate-300'
-                  }`}
+                  className={`pl-10 block w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all sm:text-sm ${errors.password
+                    ? 'border-red-400'
+                    : 'border-slate-300'
+                    }`}
                   placeholder="••••••••"
                 />
               </div>
