@@ -29,7 +29,7 @@ class ProductController extends Controller
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'main_image' => ['required', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120'],
+            'main_image' => ['required', 'image'],
             'price' => ['required', 'numeric', 'min:0'],
             'old_price' => ['nullable', 'numeric', 'min:0'],
             'quantity' => ['required', 'integer', 'min:0'],
@@ -52,6 +52,7 @@ class ProductController extends Controller
             'title' => $validated['title'],
             'description' => $validated['description'] ?? null,
             'main_image' => $path,
+            'quantity' => $validated['quantity'],
             'price' => $validated['price'],
             'old_price' => $validated['old_price'] ?? null,
             'option_1_id' => $validated['option_1_id'] ?? null,
